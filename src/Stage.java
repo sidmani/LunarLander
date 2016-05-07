@@ -13,6 +13,11 @@ public class Stage extends JComponent {
     protected Point startLoc = new Point();
     protected Point endLoc = new Point();
     private ArrayList<Line2D.Double> lines = new ArrayList<Line2D.Double>();
+
+    public Stage()  {
+
+    }
+
     public Stage(String filename) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(filename));
@@ -25,6 +30,7 @@ public class Stage extends JComponent {
             in.close();
         } catch (IOException e) {
             System.out.println("File Read Error");
+            System.out.println("This should never happen");
         }
     }
 
