@@ -16,8 +16,10 @@ public class Main {
         Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
         JFrame main = new JFrame();
         main.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        main.getContentPane().setBackground(Color.BLACK);
         main.add(lander);
         main.setVisible(true);
+        main.add(new Stars(50, main.getWidth(), main.getHeight()));
 
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
