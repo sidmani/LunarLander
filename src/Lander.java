@@ -35,7 +35,7 @@ public class Lander extends JComponent{
 
     public Lander() {
         try {
-            mainImage = ImageIO.read(new File("src/lander.jpg"));
+            mainImage = ImageIO.read(new File("src/lander.png"));
         } catch (IOException e) {
             System.out.println("failure");
         }

@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Main {
     private static Lander lander = new Lander();
-
+	
     public static void main(String[] args) {
         JFrame main = new JFrame();
         main.setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -136,7 +136,11 @@ public class Main {
             }
         }
         main.addKeyListener(new arrowListener());
+	    main.setVisible(true);
+	    main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
+
+
     public static void loadStage(Stage s) {
         lander.setLoc(s.startLoc);
     }
