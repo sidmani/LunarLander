@@ -18,7 +18,7 @@ public class Main {
     private static String[] fuelBars = {
             "|", "||", "|||", "||||", "|||||", "||||||", "|||||||", "||||||||", "|||||||||", "||||||||||", "|||||||||||"
     };
-    private static Lander lander = new Lander(3440, 1440);
+    private static Lander lander;
     private static Stage currStage;
     public static void main(String[] args) {
         JFrame frame = new JFrame();
@@ -27,7 +27,7 @@ public class Main {
         frame.setLayout(null);
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.getContentPane().setBackground(Color.BLACK);
-       // lander = new Lander(frame.getWidth(), frame.getHeight());
+        lander = new Lander(frame.getWidth(), frame.getHeight());
         FadeIn f = null;
         try {
             BufferedImage b;
@@ -68,23 +68,6 @@ public class Main {
         frame.add(fuelPercent);
 
         Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
-
-        /*ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
-        exec.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-            /*    lander.tick(0.03);
-                frame.repaint();
-                fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
-                if (currStage != null && currStage.collisionArea.intersects(lander.collisionRect)) {
-                        System.out.println("collision");
-                        lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
-                        currStage.resetStage();
-                        lander.refuel();
-                        lander.resetMotion();
-                }
-            }
-        }, 0, 30, TimeUnit.MILLISECONDS);*/
 
         class wasdListener implements KeyListener { //if the user wants to use W,A,S,D keys
             public void keyTyped(KeyEvent e) {
@@ -180,12 +163,15 @@ public class Main {
 
                 frame.repaint();
                 fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
-                if (currStage != null && (currStage.collisionArea.intersects(lander.collisionRect) || lander.location.x < 0 || lander.location.x > frame.getWidth())) {
-                    System.out.println("collision");
-                    lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
-                    currStage.resetStage();
-                    lander.refuel();
-                    lander.resetMotion();
+                if (currStage != null) {
+                    lander.collisionArea.intersect(currStage.collisionArea);
+                    if (!lander.collisionArea.isEmpty() || lander.location.x < 0 || lander.location.x > frame.getWidth()) {
+                        System.out.println("collision");
+                        lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
+                        currStage.resetStage();
+                        lander.refuel();
+                        lander.resetMotion();
+                    }
                 }
             }
             frame.remove(currStage);

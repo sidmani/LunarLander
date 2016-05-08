@@ -2,6 +2,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.util.Vector;
 public class Lander extends JComponent{
     private static Vector<Double> baseAcceleration = new Vector<Double>();
     protected Rectangle2D.Double collisionRect;
+    protected Area collisionArea = new Area();
     private double scaleFactor = 0.25;
     private BufferedImage mainImage;
     protected Point location = new Point();
@@ -130,8 +132,8 @@ public class Lander extends JComponent{
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
 
-        collisionRect.x = location.x;
-        collisionRect.y = location.y;
+        //collisionRect.x = location.x;
+        //collisionRect.y = location.y;
 
         AffineTransform t = new AffineTransform();
         t.translate(location.getX(), location.getY());
@@ -139,9 +141,10 @@ public class Lander extends JComponent{
         if (scaleFactor != 1) {
             t.scale(scaleFactor, scaleFactor);
         }
+        collisionArea = new Area(t.createTransformedShape(collisionRect));
 
         g2.drawImage(mainImage, t, this);
         g2.setColor(Color.GREEN);
-        g2.draw(collisionRect);
+        g2.draw(collisionArea);
     }
 }
