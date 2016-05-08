@@ -16,7 +16,7 @@ public class Lander extends JComponent{
     protected Rectangle2D.Double collisionRect;
     private double scaleFactor = 0.25;
     private BufferedImage mainImage;
-    private Point location = new Point();
+    protected Point location = new Point();
 
     private double angle = Math.PI/2;
 
@@ -39,7 +39,7 @@ public class Lander extends JComponent{
         } catch (IOException e) {
             System.out.println("failure");
         }
-        collisionRect = new Rectangle2D.Double(getX(), getY(), scaleFactor*mainImage.getWidth(), scaleFactor*mainImage.getHeight());
+        collisionRect = new Rectangle2D.Double(getX(), getY(), mainImage.getWidth(), mainImage.getHeight());
         this.setBounds(this.getX(), getY(), frameWidth, frameHeight);
         velocity = new Vector<Double>();
         velocity.add(0.0);
@@ -61,12 +61,10 @@ public class Lander extends JComponent{
     }
     public void setScaleFactor(double factor) {
         scaleFactor = factor;
-        collisionRect = new Rectangle2D.Double(getX(), getY(), scaleFactor*mainImage.getWidth(), scaleFactor*mainImage.getHeight());
     }
-    public void setLocation(int x, int y) {
-        super.setLocation(x,y);
+    public void setLoc(int x, int y) {
         location = new Point(x,y);
-        collisionRect = new Rectangle2D.Double(getX(), getY(), scaleFactor*mainImage.getWidth(), scaleFactor*mainImage.getHeight());
+        collisionRect = new Rectangle2D.Double(getX(), getY(), mainImage.getWidth(), mainImage.getHeight());
     }
 
     public void tick(Double elapsed) {
@@ -141,8 +139,9 @@ public class Lander extends JComponent{
         if (scaleFactor != 1) {
             t.scale(scaleFactor, scaleFactor);
         }
-        g2.draw(collisionRect);
-        g2.drawImage(mainImage, t, this);
 
+        g2.drawImage(mainImage, t, this);
+        g2.setColor(Color.GREEN);
+        g2.draw(collisionRect);
     }
 }

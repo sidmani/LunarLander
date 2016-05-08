@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -68,22 +69,22 @@ public class Main {
 
         Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
 
-        ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+        /*ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                lander.tick(0.03);
+            /*    lander.tick(0.03);
                 frame.repaint();
                 fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
                 if (currStage != null && currStage.collisionArea.intersects(lander.collisionRect)) {
-                     //   System.out.println("collision");
-                        lander.setLocation(currStage.startLoc.x, currStage.startLoc.y);
+                        System.out.println("collision");
+                        lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
                         currStage.resetStage();
                         lander.refuel();
                         lander.resetMotion();
                 }
             }
-        }, 0, 30, TimeUnit.MILLISECONDS);
+        }, 0, 30, TimeUnit.MILLISECONDS);*/
 
         class wasdListener implements KeyListener { //if the user wants to use W,A,S,D keys
             public void keyTyped(KeyEvent e) {
@@ -163,17 +164,28 @@ public class Main {
 	    frame.setVisible(true);
         //////////////start levels//////////////////////////////
         for (int i = 0; i<10; i++) {
-            currStage = new Stage(frame.getWidth(), frame.getHeight(), 1 * 3 + 10);
+            currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 10);
             currStage.setColor(Color.BLUE);
             lander.refuel();
-            lander.setLocation(currStage.startLoc.x, currStage.startLoc.y);
+            lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
             frame.add(currStage);
             frame.setVisible(true);
             while(!currStage.completed) {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(30);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+                lander.tick(0.03);
+
+                frame.repaint();
+                fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
+                if (currStage != null && (currStage.collisionArea.intersects(lander.collisionRect) || lander.location.x < 0 || lander.location.x > frame.getWidth())) {
+                    System.out.println("collision");
+                    lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
+                    currStage.resetStage();
+                    lander.refuel();
+                    lander.resetMotion();
                 }
             }
             frame.remove(currStage);

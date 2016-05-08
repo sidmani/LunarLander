@@ -28,7 +28,6 @@ public class Stage extends JComponent {
         Random r = new Random();
         int centerY = height/2;
 		int tunnelSize = (500-4*difficulty);
-
         for (int i = 0; i <= width; i+= width / this.NUMBER_OF_LINES) {
             this.points.add(new Point2D.Double(i,height - r.nextInt((int) tunnelSize)));
         }
@@ -47,10 +46,7 @@ public class Stage extends JComponent {
             this.sky.add(p);
             collisionArea.add(new Area(p));
         }
-        int startTop= (int)points.get(1).getY();
-        int startBottom = (int)points.get(1).getY();
-        startLoc = new Point(15, 300);
-
+        startLoc = new Point(15,  (int)((this.points.get(0).getY() + 0.5*tunnelSize - centerY)+(this.points.get(0).getY() - 0.5 * tunnelSize - centerY))/2);
     }
     public void setColor(Color c) {
         color = c;
