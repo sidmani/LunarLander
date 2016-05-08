@@ -14,7 +14,8 @@ public class FadeIn extends JComponent implements ActionListener {
     private float alpha = 0f;
     private Point loc;
     private boolean increase = true;
-    public FadeIn(BufferedImage b, int x, int y) {
+    public FadeIn(BufferedImage b, int x, int y, int frameWidth, int frameHeight) {
+        setBounds(getX(), getY(), frameWidth, frameHeight);
         imagem = b;
         loc = new Point(x,y);
     }
@@ -36,9 +37,6 @@ public class FadeIn extends JComponent implements ActionListener {
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
                 alpha));
         g2d.drawImage(imagem, loc.x - imagem.getWidth()/2, loc.y - imagem.getHeight()/2, null);
-      //  g2d.drawImage(imagem, 0, 0, null);
-        System.out.println("repainted. alpha: " + alpha);
-
     }
 
     public void actionPerformed(ActionEvent e) {

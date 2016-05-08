@@ -14,23 +14,30 @@ import java.util.concurrent.TimeUnit;
  * Created by Sid on 5/7/16.
  */
 public class Main {
-    private static Lander lander = new Lander();
+    private static String[] fuelBars = {
+            "|", "||", "|||", "||||", "|||||", "||||||", "|||||||", "||||||||", "|||||||||", "||||||||||", "|||||||||||"
+    };
+    private static Lander lander = new Lander(3440, 1440);
 	
     public static void main(String[] args) {
-        JFrame main = new JFrame();
-        main.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-        main.getContentPane().setBackground(Color.BLACK);
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setLayout(null);
+        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        frame.getContentPane().setBackground(Color.BLACK);
+       // lander = new Lander(frame.getWidth(), frame.getHeight());
         FadeIn f = null;
         try {
             BufferedImage b;
             b = ImageIO.read(new File("src/logo.jpg"));
-            f = new FadeIn(b, main.getWidth()/2, main.getHeight()/2);
-            main.add(f);
+            f = new FadeIn(b, frame.getWidth()/2, frame.getHeight()/2, frame.getWidth(), frame.getHeight());
+            frame.add(f);
             f.startIncrease();
         } catch (IOException e) {
             System.out.println("failure to load logo");
         }
-        main.setVisible(true);
+        frame.setVisible(true);
         try {
             Thread.sleep(3000);                 //1000 milliseconds is one second.
         } catch(InterruptedException ex) {
@@ -44,20 +51,33 @@ public class Main {
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-        main.getContentPane().removeAll();
-        main.add(new Stars(100, main.getWidth(), main.getHeight()));
-        main.setVisible(true);
+        frame.getContentPane().removeAll();
 
+        frame.add(lander);
+        frame.setVisible(true);
+
+        frame.add(new Stars(100, frame.getWidth(), frame.getHeight()));
+        frame.setVisible(true);
+
+        JLabel fuelPercent = new JLabel();
+        fuelPercent.setBounds(10,10,frame.getWidth(),80);
+        fuelPercent.setFont(fuelPercent.getFont().deriveFont(64f));
+        fuelPercent.setForeground(Color.WHITE);
+
+        frame.add(fuelPercent);
+
+        frame.setVisible(true);
+        //frame.add(new Stage(frame.getWidth(), frame.getHeight()));
 
         Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
-        main.add(lander);
 
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 lander.tick(0.03);
-                main.repaint();
+                frame.repaint();
+                fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
             }
         }, 0, 30, TimeUnit.MILLISECONDS);
 
@@ -97,7 +117,7 @@ public class Main {
                 }
             }
         }
-        main.addKeyListener(new wasdListener());
+        frame.addKeyListener(new wasdListener());
 
         class arrowListener implements KeyListener { //if the user wants to use the arrow keys
             public void keyTyped(KeyEvent e) {
@@ -135,9 +155,9 @@ public class Main {
                 }
             }
         }
-        main.addKeyListener(new arrowListener());
-	    main.setVisible(true);
-	    main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.addKeyListener(new arrowListener());
+	    frame.setVisible(true);
+	    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
 

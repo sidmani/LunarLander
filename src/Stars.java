@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Stars extends JComponent {
 	ArrayList<Point2D.Double> points = new ArrayList<Point2D.Double>();
 	public Stars(int num, int width, int height) {
+        this.setBounds(this.getX(), this.getY(), width, height);
 		for (int i = 0; i < num; i++) {
 			points.add(new Point2D.Double(Math.random()*width, Math.random()*height));
 		}

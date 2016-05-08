@@ -26,19 +26,21 @@ public class Lander extends JComponent{
     private double rotationalVelocity = 0;
     private double rotationalAcc = 0;
 
-    private double fuelPercent;
+    protected double fuelPercent=100;
 
     public static void setGravity(double xComp, double yComp) {
         baseAcceleration.add(xComp);
         baseAcceleration.add(yComp);
     }
 
-    public Lander() {
+    public Lander(int frameWidth, int frameHeight) {
         try {
             mainImage = ImageIO.read(new File("src/lander.png"));
         } catch (IOException e) {
             System.out.println("failure");
         }
+        this.setBounds(this.getX(), getY(), frameWidth, frameHeight);
+
         velocity = new Vector<Double>();
         velocity.add(0.0);
         velocity.add(0.0);
@@ -48,6 +50,14 @@ public class Lander extends JComponent{
     }
 
     public void tick(Double elapsed) {
+        if (fuelPercent > 0) {
+            if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
+                fuelPercent -= 9*elapsed;
+            }
+            if (rotationalAcc != 0) {
+                fuelPercent -= 3*elapsed;
+            }
+        }
         rotationalVelocity += rotationalAcc * elapsed;
         angle += rotationalVelocity*elapsed;
 
@@ -65,9 +75,7 @@ public class Lander extends JComponent{
     }
 
     public void applyThrustDown(boolean enable, double magnitude) {
-        if (enable) {
-            System.out.println("Thrust enabled with magnitude" + magnitude);
-
+        if (enable && fuelPercent > 0) {
             acceleration.set(1, magnitude);
             acceleration.set(0, magnitude);
 
@@ -80,7 +88,7 @@ public class Lander extends JComponent{
     }
 
     public void applyThrustLeft(boolean enable) {
-        if (enable) {
+        if (enable && fuelPercent > 0) {
             rotationalAcc = 1;
             //TODO: display flames
         }
@@ -89,7 +97,7 @@ public class Lander extends JComponent{
         }
     }
     public void applyThrustRight(boolean enable) {
-        if (enable) {
+        if (enable && fuelPercent > 0) {
             rotationalAcc = -1;
             //TODO: display flames
         }
