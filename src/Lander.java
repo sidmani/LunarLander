@@ -2,7 +2,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,8 +13,8 @@ import java.util.Vector;
  */
 public class Lander extends JComponent{
     private static Vector<Double> baseAcceleration = new Vector<Double>();
-    protected Ellipse2D.Double collisionRing = new Ellipse2D.Double(0,0,10,10);
-
+    protected Rectangle2D.Double collisionRect;
+    private double scaleFactor = 0.25;
     private BufferedImage mainImage;
     private Point location = new Point();
 
@@ -39,14 +39,34 @@ public class Lander extends JComponent{
         } catch (IOException e) {
             System.out.println("failure");
         }
+        collisionRect = new Rectangle2D.Double(getX(), getY(), scaleFactor*mainImage.getWidth(), scaleFactor*mainImage.getHeight());
         this.setBounds(this.getX(), getY(), frameWidth, frameHeight);
-
         velocity = new Vector<Double>();
         velocity.add(0.0);
         velocity.add(0.0);
         acceleration = new Vector<Double>();
         acceleration.add(0.0);
         acceleration.add(0.0);
+    }
+    public void resetMotion() {
+        velocity = new Vector<Double>();
+        velocity.add(0.0);
+        velocity.add(0.0);
+        acceleration = new Vector<Double>();
+        acceleration.add(0.0);
+        acceleration.add(0.0);
+        rotationalVelocity = 0;
+        rotationalAcc = 0;
+        angle = Math.PI/2;
+    }
+    public void setScaleFactor(double factor) {
+        scaleFactor = factor;
+        collisionRect = new Rectangle2D.Double(getX(), getY(), scaleFactor*mainImage.getWidth(), scaleFactor*mainImage.getHeight());
+    }
+    public void setLocation(int x, int y) {
+        super.setLocation(x,y);
+        location = new Point(x,y);
+        collisionRect = new Rectangle2D.Double(getX(), getY(), scaleFactor*mainImage.getWidth(), scaleFactor*mainImage.getHeight());
     }
 
     public void tick(Double elapsed) {
@@ -105,15 +125,23 @@ public class Lander extends JComponent{
             rotationalAcc = 0;
         }
     }
-    public void setLoc(Point p) {
-        location = p;
+    public void refuel() {
+        fuelPercent = 100;
     }
 
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+
+        collisionRect.x = location.x;
+        collisionRect.y = location.y;
+
         AffineTransform t = new AffineTransform();
         t.translate(location.getX(), location.getY());
         t.rotate(angle-Math.PI/2);
+        if (scaleFactor != 1) {
+            t.scale(scaleFactor, scaleFactor);
+        }
+        g2.draw(collisionRect);
         g2.drawImage(mainImage, t, this);
 
     }

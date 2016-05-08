@@ -18,7 +18,7 @@ public class Main {
             "|", "||", "|||", "||||", "|||||", "||||||", "|||||||", "||||||||", "|||||||||", "||||||||||", "|||||||||||"
     };
     private static Lander lander = new Lander(3440, 1440);
-
+    private static Stage currStage;
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,9 +66,6 @@ public class Main {
 
         frame.add(fuelPercent);
 
-	    frame.add(new Stage(frame.getWidth(), frame.getHeight(), 66));
-	    frame.setVisible(true);
-
         Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
 
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
@@ -78,6 +75,13 @@ public class Main {
                 lander.tick(0.03);
                 frame.repaint();
                 fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
+                if (currStage != null && currStage.collisionArea.intersects(lander.collisionRect)) {
+                     //   System.out.println("collision");
+                        lander.setLocation(currStage.startLoc.x, currStage.startLoc.y);
+                        currStage.resetStage();
+                        lander.refuel();
+                        lander.resetMotion();
+                }
             }
         }, 0, 30, TimeUnit.MILLISECONDS);
 
@@ -157,6 +161,23 @@ public class Main {
         }
         frame.addKeyListener(new arrowListener());
 	    frame.setVisible(true);
-	    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //////////////start levels//////////////////////////////
+        for (int i = 0; i<10; i++) {
+            currStage = new Stage(frame.getWidth(), frame.getHeight(), 1 * 3 + 10);
+            currStage.setColor(Color.BLUE);
+            lander.refuel();
+            lander.setLocation(currStage.startLoc.x, currStage.startLoc.y);
+            frame.add(currStage);
+            frame.setVisible(true);
+            while(!currStage.completed) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            frame.remove(currStage);
+        }
+
     }
 }
