@@ -18,7 +18,7 @@ public class Main {
             "|", "||", "|||", "||||", "|||||", "||||||", "|||||||", "||||||||", "|||||||||", "||||||||||", "|||||||||||"
     };
     private static Lander lander = new Lander(3440, 1440);
-	
+
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,7 +30,7 @@ public class Main {
         FadeIn f = null;
         try {
             BufferedImage b;
-            b = ImageIO.read(new File("src/logo.jpg"));
+            b = ImageIO.read(new File("src/logo.png"));
             f = new FadeIn(b, frame.getWidth()/2, frame.getHeight()/2, frame.getWidth(), frame.getHeight());
             frame.add(f);
             f.startIncrease();
@@ -66,8 +66,8 @@ public class Main {
 
         frame.add(fuelPercent);
 
-        frame.setVisible(true);
-        //frame.add(new Stage(frame.getWidth(), frame.getHeight()));
+	    frame.add(new Stage(frame.getWidth(), frame.getHeight(), 66));
+	    frame.setVisible(true);
 
         Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
 
@@ -158,10 +158,5 @@ public class Main {
         frame.addKeyListener(new arrowListener());
 	    frame.setVisible(true);
 	    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-
-
-    public static void loadStage(Stage s) {
-        lander.setLoc(s.startLoc);
     }
 }

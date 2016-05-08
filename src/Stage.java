@@ -13,30 +13,51 @@ import java.util.Random;
  */
 public class Stage extends JComponent {
 
-	private int width, height;
-	private final int NUMBER_OF_LINES = 3;
+	private final int NUMBER_OF_LINES = 9;
     private ArrayList<Point2D.Double> points = new ArrayList<>();
+	private ArrayList<Polygon> ground = new ArrayList<>();
+	private ArrayList<Polygon> sky = new ArrayList<>();
 
-    public Stage(int width, int height)  {
+    public Stage(int width, int height, int difficulty)  {
+	    setBounds(getX(), getY(), width, height);
+
+	    int newCenter = height/2;
+
         Random r = new Random();
-	    this.width = width;
-	    this.height = height;
 
-        for (int i = 0; i <= width; i+= width / NUMBER_OF_LINES) {
-            points.add(new Point2D.Double(i,height - r.nextInt((int) height/3)));
+		int tunnelSize = (int) (newCenter * (1 - difficulty/100));
+
+        for (int i = 0; i <= width; i+= width / this.NUMBER_OF_LINES) {
+            this.points.add(new Point2D.Double(i,height - r.nextInt((int) tunnelSize)));
         }
+
+	    for (int i = 0; i < this.points.size() - 1; i++) {
+		    int[] xPoints = { (int) this.points.get(i).getX(), (int) this.points.get(i + 1).getX(), (width / NUMBER_OF_LINES) * (i + 1), (width / NUMBER_OF_LINES) * i };
+		    int[] yPoints = {(int) this.points.get(i).getY() - newCenter/2, (int) this.points.get(i + 1).getY() -newCenter/2, height, height};
+		    this.ground.add(new Polygon(xPoints, yPoints, 4));
+	    }
+
+	    for (int i = 0; i < this.points.size() - 1; i++)    {
+		    int[] xPoints = { (int) this.points.get(i).getX(), (int) this.points.get(i + 1).getX(), (width / NUMBER_OF_LINES) * (i + 1), (width / NUMBER_OF_LINES) * i };
+		    int[] yPoints = {(int) (-tunnelSize - newCenter/2 + this.points.get(i).getY()), (int) (-tunnelSize -newCenter/2 + this.points.get(i + 1).getY()), 0, 0};
+		    this.sky.add(new Polygon(xPoints, yPoints, 4));
+	    }
     }
 
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.WHITE);
+	    Random r = new Random();
 
-        for (int i = 0; i < points.size() - 1; i++) {
-	        int[] xPoints = { (int) this.points.get(i).getX(), (int) this.points.get(i + 1).getX(), (width / NUMBER_OF_LINES) * (i + 1), (width / NUMBER_OF_LINES) * i };
-	        int[] yPoints = {(int) this.points.get(i).getY(), (int) this.points.get(i + 1).getY(), height, height};
-            g2.fillPolygon(new Polygon(xPoints, yPoints, 4));
+        for (Polygon p: ground) {
+	        g2.setColor(new Color(r.nextInt(256), r.nextInt(256),r.nextInt(256)));
+            g2.fillPolygon(p);
         }
+
+	    for (Polygon p: sky)    {
+		    g2.setColor(new Color(r.nextInt(256), r.nextInt(256),r.nextInt(256)));
+		    g2.fillPolygon(p);
+	    }
 
     }
 }
