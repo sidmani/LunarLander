@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
  * Created by Sid on 5/7/16.
  */
 public class Main {
+    private static final double ANGLE_ACCURACY = Math.PI/4;
+    private static final int MAX_SAFE_VELOCITY = 100;
+
     private static String[] fuelBars = {
             "|", "||", "|||", "||||", "|||||", "||||||", "|||||||", "||||||||", "|||||||||", "||||||||||", "|||||||||||"
     };
@@ -73,12 +76,12 @@ public class Main {
         JLabel velocityLabel = new JLabel("");
         velocityLabel.setBounds(10,frame.getHeight()-90,frame.getWidth()-10,80);
         velocityLabel.setFont(fuelPercent.getFont().deriveFont(64f));
-        velocityLabel.setForeground(Color.WHITE);
+        velocityLabel.setForeground(Color.GREEN);
 
         JLabel angleLabel = new JLabel("", SwingConstants.RIGHT);
         angleLabel.setBounds(10,frame.getHeight()-90,frame.getWidth()-10,80);
         angleLabel.setFont(fuelPercent.getFont().deriveFont(64f));
-        angleLabel.setForeground(Color.WHITE);
+        angleLabel.setForeground(Color.GREEN);
 
         frame.add(fuelPercent);
         frame.add(attempts);
@@ -164,6 +167,8 @@ public class Main {
 	    frame.setVisible(true);
         //////////////start levels//////////////////////////////
         int attemptCount = 0;
+        boolean complete;
+        int velocity = 0;
         for (int i = 0; i<10; i++) {
             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
             currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 10);
@@ -172,7 +177,8 @@ public class Main {
             lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
             frame.add(currStage);
             frame.setVisible(true);
-            while(!currStage.completed) {
+            complete = false;
+            while(!complete) {
                 try {
                     Thread.sleep(30);
                 } catch (InterruptedException e) {
@@ -181,9 +187,39 @@ public class Main {
                 lander.tick(0.03);
                 frame.repaint();
                 fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
-                velocityLabel.setText(String.valueOf((int) Math.sqrt(lander.velocity.get(0)*lander.velocity.get(0) + lander.velocity.get(1)*lander.velocity.get(1))) + " METERS/SEC");
+                velocity = (int) Math.sqrt(lander.velocity.get(0)*lander.velocity.get(0) + lander.velocity.get(1)*lander.velocity.get(1));
+                velocityLabel.setText(velocity + " METERS/SEC");
                 angleLabel.setText(String.valueOf((int)Math.toDegrees(lander.angle) - 90) + " DEG");
+                if (velocity > MAX_SAFE_VELOCITY) {
+                    velocityLabel.setForeground(Color.RED);
+                }
+                else {
+                    velocityLabel.setForeground(Color.GREEN);
+                }
+                if (Math.abs(lander.angle - Math.PI/2) > ANGLE_ACCURACY) {
+                    angleLabel.setForeground(Color.RED);
+                }
+                else {
+                    angleLabel.setForeground(Color.GREEN);
+                }
                 if (currStage != null) {
+                    if (lander.collisionArea.intersects(currStage.landingPad)) {
+                        System.out.println("Landing Attempt");
+                        if (Math.abs(lander.angle - Math.PI/2) < ANGLE_ACCURACY && velocity < MAX_SAFE_VELOCITY && lander.location.y < currStage.landingPad.y + 5) {
+                            //victory
+                            complete = true;
+                            lander.refuel();
+                            lander.resetMotion();
+                        }
+                        else {
+                            lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
+                            currStage.resetStage();
+                            lander.refuel();
+                            lander.resetMotion();
+                            attemptCount++;
+                            attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
+                        }
+                    }
                     lander.collisionArea.intersect(currStage.collisionArea);
                     if (!lander.collisionArea.isEmpty() || lander.location.x < 0 || lander.location.x > frame.getWidth()) {
                         System.out.println("collision");
@@ -194,6 +230,7 @@ public class Main {
                         attemptCount++;
                         attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
                     }
+
                 }
             }
             frame.remove(currStage);

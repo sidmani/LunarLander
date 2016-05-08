@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.Random;
 public class Stage extends JComponent {
     protected boolean completed = false;
     protected Point startLoc;
+    protected Rectangle2D.Double landingPad;
 
 	private final int NUMBER_OF_LINES = 9;
     private ArrayList<Point2D.Double> points = new ArrayList<>();
@@ -47,6 +49,8 @@ public class Stage extends JComponent {
             collisionArea.add(new Area(p));
         }
         startLoc = new Point(15,  (int)((this.points.get(0).getY() + 0.5*tunnelSize - centerY)+(this.points.get(0).getY() - 0.5 * tunnelSize - centerY))/2);
+        Point endLoc = new Point((int)this.points.get(points.size()-2).getX(),  (int)((this.points.get(points.size()-2).getY() + 0.5*tunnelSize - centerY)+(this.points.get(points.size()-2).getY() - 0.5 * tunnelSize - centerY))/2 + 30);
+        landingPad = new Rectangle2D.Double(endLoc.x - 10, endLoc.y, 60, 5);
     }
     public void setColor(Color c) {
         color = c;
@@ -81,5 +85,7 @@ public class Stage extends JComponent {
         }
         g2.setColor(Color.RED);
         g2.draw(collisionArea);
+        g2.setColor(Color.CYAN);
+        g2.fill(landingPad);
     }
 }

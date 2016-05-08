@@ -87,10 +87,10 @@ public class Lander extends JComponent{
     public void tick(Double elapsed) {
         if (fuelPercent > 0) {
             if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
-                fuelPercent -= 9 * elapsed;
+                fuelPercent -= 1 * elapsed;
             }
             if (rotationalAcc != 0) {
-                fuelPercent -= 3 * elapsed;
+                fuelPercent -= 0.3 * elapsed;
             }
         }
         else {

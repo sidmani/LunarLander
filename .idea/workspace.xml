@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b60e6b27-3036-4fee-8623-4334f621e432" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lander_flame_bottom.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lander_flame_bottom_left.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lander_flame_bottom_right.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lander_flame_left.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/lander_flame_right.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Lander.java" afterPath="$PROJECT_DIR$/src/Lander.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Stage.java" afterPath="$PROJECT_DIR$/src/Stage.java" />
     </list>
     <ignored path="LunarLander.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,8 +32,8 @@
           <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Main.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="584">
-                  <caret line="155" column="41" selection-start-line="155" selection-start-column="41" selection-end-line="155" selection-end-column="41" />
+                <state relative-caret-position="448">
+                  <caret line="207" column="160" selection-start-line="207" selection-start-column="160" selection-end-line="207" selection-end-column="160" />
                   <folding />
                 </state>
               </provider>
@@ -47,10 +43,10 @@
             <entry file="file://$PROJECT_DIR$/src/Stage.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="0">
-                  <caret line="64" column="34" selection-start-line="64" selection-start-column="34" selection-end-line="64" selection-end-column="34" />
+                  <caret line="68" column="34" selection-start-line="68" selection-start-column="34" selection-end-line="68" selection-end-column="34" />
                   <folding>
-                    <element signature="e#2345#2346#0" expanded="true" />
-                    <element signature="e#2370#2371#0" expanded="true" />
+                    <element signature="e#2737#2738#0" expanded="true" />
+                    <element signature="e#2762#2763#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -63,14 +59,14 @@
           <file leaf-file-name="Lander.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/Lander.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="952">
-                  <caret line="174" column="66" selection-start-line="174" selection-start-column="66" selection-end-line="174" selection-end-column="66" />
+                <state relative-caret-position="731">
+                  <caret line="89" column="34" selection-start-line="89" selection-start-column="34" selection-end-line="89" selection-end-column="34" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#2721#2722#0" expanded="true" />
-                    <element signature="e#2757#2758#0" expanded="true" />
-                    <element signature="e#6171#6172#0" expanded="true" />
-                    <element signature="e#6204#6205#0" expanded="true" />
+                    <element signature="e#2725#2726#0" expanded="true" />
+                    <element signature="e#2761#2762#0" expanded="true" />
+                    <element signature="e#6355#6356#0" expanded="true" />
+                    <element signature="e#6388#6389#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -99,11 +95,10 @@
           <file leaf-file-name="Stage.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/Stage.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+                <state relative-caret-position="602">
+                  <caret line="51" column="233" selection-start-line="51" selection-start-column="233" selection-end-line="51" selection-end-column="233" />
                   <folding>
                     <element signature="docComment;class#Stage#0" expanded="false" />
-                    <element signature="method#paintComponent#0;class#Stage#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -137,8 +132,8 @@
         <option value="$PROJECT_DIR$/src/Stars.java" />
         <option value="$PROJECT_DIR$/src/FadeIn.java" />
         <option value="$PROJECT_DIR$/src/Stage.java" />
-        <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/Lander.java" />
+        <option value="$PROJECT_DIR$/src/Main.java" />
       </list>
     </option>
   </component>
@@ -630,7 +625,21 @@
       <option name="project" value="LOCAL" />
       <updated>1462687744501</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Flames are visible.">
+      <created>1462689552408</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1462689552408</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Added speed, angle, and attempt labels.">
+      <created>1462690976955</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1462690976955</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -679,7 +688,9 @@
     <MESSAGE value="Collisions almost working; level reset working." />
     <MESSAGE value="Collision working." />
     <MESSAGE value="Collision working, with rotation." />
-    <option name="LAST_COMMIT_MESSAGE" value="Collision working, with rotation." />
+    <MESSAGE value="Flames are visible." />
+    <MESSAGE value="Added speed, angle, and attempt labels." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added speed, angle, and attempt labels." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -696,10 +707,10 @@
           <caret line="31" column="36" selection-start-line="31" selection-start-column="36" selection-end-line="31" selection-end-column="36" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2721#2722#0" expanded="true" />
-            <element signature="e#2757#2758#0" expanded="true" />
-            <element signature="e#6171#6172#0" expanded="true" />
-            <element signature="e#6204#6205#0" expanded="true" />
+            <element signature="e#2725#2726#0" expanded="true" />
+            <element signature="e#2761#2762#0" expanded="true" />
+            <element signature="e#6355#6356#0" expanded="true" />
+            <element signature="e#6388#6389#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -717,8 +728,8 @@
         <state relative-caret-position="165">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
-            <element signature="docComment;class#Stage#0" expanded="false" />
-            <element signature="method#paintComponent#0;class#Stage#0" expanded="false" />
+            <element signature="e#2737#2738#0" expanded="true" />
+            <element signature="e#2762#2763#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -729,10 +740,10 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2721#2722#0" expanded="true" />
-            <element signature="e#2757#2758#0" expanded="true" />
-            <element signature="e#6171#6172#0" expanded="true" />
-            <element signature="e#6204#6205#0" expanded="true" />
+            <element signature="e#2725#2726#0" expanded="true" />
+            <element signature="e#2761#2762#0" expanded="true" />
+            <element signature="e#6355#6356#0" expanded="true" />
+            <element signature="e#6388#6389#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -750,8 +761,8 @@
         <state relative-caret-position="300">
           <caret line="26" column="50" selection-start-line="26" selection-start-column="50" selection-end-line="26" selection-end-column="50" />
           <folding>
-            <element signature="docComment;class#Stage#0" expanded="false" />
-            <element signature="method#paintComponent#0;class#Stage#0" expanded="false" />
+            <element signature="e#2737#2738#0" expanded="true" />
+            <element signature="e#2762#2763#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -790,33 +801,33 @@
     <entry file="file://$PROJECT_DIR$/src/Stage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <caret line="68" column="34" selection-start-line="68" selection-start-column="34" selection-end-line="68" selection-end-column="34" />
           <folding>
-            <element signature="docComment;class#Stage#0" expanded="false" />
-            <element signature="method#paintComponent#0;class#Stage#0" expanded="false" />
+            <element signature="e#2737#2738#0" expanded="true" />
+            <element signature="e#2762#2763#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Lander.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="89" column="34" selection-start-line="89" selection-start-column="34" selection-end-line="89" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2725#2726#0" expanded="true" />
+            <element signature="e#2761#2762#0" expanded="true" />
+            <element signature="e#6355#6356#0" expanded="true" />
+            <element signature="e#6388#6389#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="155" column="41" selection-start-line="155" selection-start-column="41" selection-end-line="155" selection-end-column="41" />
+        <state relative-caret-position="448">
+          <caret line="207" column="160" selection-start-line="207" selection-start-column="160" selection-end-line="207" selection-end-column="160" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Lander.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="952">
-          <caret line="174" column="66" selection-start-line="174" selection-start-column="66" selection-end-line="174" selection-end-column="66" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#2721#2722#0" expanded="true" />
-            <element signature="e#2757#2758#0" expanded="true" />
-            <element signature="e#6171#6172#0" expanded="true" />
-            <element signature="e#6204#6205#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
