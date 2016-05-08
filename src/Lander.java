@@ -26,6 +26,7 @@ public class Lander extends JComponent{
     private double rotationalVelocity = 0;
     private double rotationalAcc = 0;
 
+    private double fuelPercent;
 
     public static void setGravity(double xComp, double yComp) {
         baseAcceleration.add(xComp);

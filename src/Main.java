@@ -1,7 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,13 +17,40 @@ public class Main {
     private static Lander lander = new Lander();
 
     public static void main(String[] args) {
-        Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
         JFrame main = new JFrame();
         main.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         main.getContentPane().setBackground(Color.BLACK);
-        main.add(lander);
+        FadeIn f = null;
+        try {
+            BufferedImage b;
+            b = ImageIO.read(new File("src/logo.jpg"));
+            f = new FadeIn(b, main.getWidth()/2, main.getHeight()/2);
+            main.add(f);
+            f.startIncrease();
+        } catch (IOException e) {
+            System.out.println("failure to load logo");
+        }
         main.setVisible(true);
-        main.add(new Stars(50, main.getWidth(), main.getHeight()));
+        try {
+            Thread.sleep(3000);                 //1000 milliseconds is one second.
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        if (f != null) {
+            f.startDecrease();
+        }
+        try {
+            Thread.sleep(3000);                 //1000 milliseconds is one second.
+        } catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        main.getContentPane().removeAll();
+        main.add(new Stars(100, main.getWidth(), main.getHeight()));
+        main.setVisible(true);
+
+
+        Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
+        main.add(lander);
 
         ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
         exec.scheduleAtFixedRate(new Runnable() {
@@ -108,6 +139,5 @@ public class Main {
     }
     public static void loadStage(Stage s) {
         lander.setLoc(s.startLoc);
-
     }
 }

@@ -18,8 +18,7 @@ public class Stars extends JComponent {
         Graphics g2 = (Graphics2D) g;
         g2.setColor(Color.WHITE);
         for(Point2D.Double p : points) {
-            g2.drawOval((int)p.x, (int)p.y, 4, 4);
+            g2.fillOval((int)p.x, (int)p.y, 4, 4);
         }
     }
 }
-
