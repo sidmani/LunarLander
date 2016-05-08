@@ -18,6 +18,13 @@ public class Lander extends JComponent{
     protected Area collisionArea = new Area();
     private double scaleFactor = 0.25;
     private BufferedImage mainImage;
+    private BufferedImage base_image;
+    private BufferedImage flame_bottom;
+    private BufferedImage flame_left;
+    private BufferedImage flame_bottom_left;
+    private BufferedImage flame_bottom_right;
+    private BufferedImage flame_right;
+
     protected Point location = new Point();
 
     private double angle = Math.PI/2;
@@ -37,10 +44,18 @@ public class Lander extends JComponent{
 
     public Lander(int frameWidth, int frameHeight) {
         try {
-            mainImage = ImageIO.read(new File("src/lander.png"));
+            base_image = ImageIO.read(new File("src/lander.png"));
+            flame_bottom = ImageIO.read(new File("src/lander_flame_bottom.png"));
+            flame_left = ImageIO.read(new File("src/lander_flame_left.png"));
+            flame_bottom_left = ImageIO.read(new File("src/lander_flame_bottom_left.png"));
+            flame_bottom_right = ImageIO.read(new File("src/lander_flame_bottom_right.png"));
+            flame_right = ImageIO.read(new File("src/lander_flame_right.png"));
+
+
         } catch (IOException e) {
             System.out.println("failure");
         }
+        mainImage = base_image;
         collisionRect = new Rectangle2D.Double(getX(), getY(), mainImage.getWidth(), mainImage.getHeight());
         this.setBounds(this.getX(), getY(), frameWidth, frameHeight);
         velocity = new Vector<Double>();
@@ -98,12 +113,29 @@ public class Lander extends JComponent{
         if (enable && fuelPercent > 0) {
             acceleration.set(1, magnitude);
             acceleration.set(0, magnitude);
-
+            if (rotationalAcc > 0) {
+                mainImage = flame_bottom_left;
+            }
+            else if (rotationalAcc < 0) {
+                mainImage = flame_bottom_right;
+            }
+            else {
+                mainImage = flame_bottom;
+            }
             //TODO: display flames
         }
         else {
             acceleration.set(1, 0.0);
             acceleration.set(0, 0.0);
+            if (rotationalAcc > 0) {
+                mainImage = flame_left;
+            }
+            else if (rotationalAcc < 0) {
+                mainImage = flame_right;
+            }
+            else {
+                mainImage = base_image;
+            }
         }
     }
 
@@ -111,8 +143,20 @@ public class Lander extends JComponent{
         if (enable && fuelPercent > 0) {
             rotationalAcc = 1;
             //TODO: display flames
+            if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
+                mainImage = flame_bottom_left;
+            }
+            else {
+                mainImage = flame_left;
+            }
         }
         else {
+            if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
+                mainImage = flame_bottom;
+            }
+            else {
+                mainImage = base_image;
+            }
             rotationalAcc = 0;
         }
     }
@@ -120,10 +164,23 @@ public class Lander extends JComponent{
         if (enable && fuelPercent > 0) {
             rotationalAcc = -1;
             //TODO: display flames
+            if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
+                mainImage = flame_bottom_right;
+            }
+            else {
+                mainImage = flame_right;
+            }
         }
         else {
+            if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
+                mainImage = flame_bottom;
+            }
+            else {
+                mainImage = base_image;
+            }
             rotationalAcc = 0;
         }
+
     }
     public void refuel() {
         fuelPercent = 100;

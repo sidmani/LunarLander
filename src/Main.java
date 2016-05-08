@@ -40,7 +40,7 @@ public class Main {
         }
         frame.setVisible(true);
         try {
-            Thread.sleep(3000);                 //1000 milliseconds is one second.
+            Thread.sleep(3000);
         } catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
