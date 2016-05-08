@@ -61,12 +61,29 @@ public class Main {
         frame.setVisible(true);
 
         JLabel fuelPercent = new JLabel();
-        fuelPercent.setBounds(10,10,frame.getWidth(),80);
+        fuelPercent.setBounds(10,10,frame.getWidth()-10,80);
         fuelPercent.setFont(fuelPercent.getFont().deriveFont(64f));
         fuelPercent.setForeground(Color.WHITE);
 
-        frame.add(fuelPercent);
+        JLabel attempts = new JLabel("0 ATTEMPTS", SwingConstants.RIGHT);
+        attempts.setBounds(10,10,frame.getWidth()-10,80);
+        attempts.setFont(fuelPercent.getFont().deriveFont(64f));
+        attempts.setForeground(Color.WHITE);
 
+        JLabel velocityLabel = new JLabel("");
+        velocityLabel.setBounds(10,frame.getHeight()-90,frame.getWidth()-10,80);
+        velocityLabel.setFont(fuelPercent.getFont().deriveFont(64f));
+        velocityLabel.setForeground(Color.WHITE);
+
+        JLabel angleLabel = new JLabel("", SwingConstants.RIGHT);
+        angleLabel.setBounds(10,frame.getHeight()-90,frame.getWidth()-10,80);
+        angleLabel.setFont(fuelPercent.getFont().deriveFont(64f));
+        angleLabel.setForeground(Color.WHITE);
+
+        frame.add(fuelPercent);
+        frame.add(attempts);
+        frame.add(velocityLabel);
+        frame.add(angleLabel);
         Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
 
         class wasdListener implements KeyListener { //if the user wants to use W,A,S,D keys
@@ -146,7 +163,9 @@ public class Main {
         frame.addKeyListener(new arrowListener());
 	    frame.setVisible(true);
         //////////////start levels//////////////////////////////
+        int attemptCount = 0;
         for (int i = 0; i<10; i++) {
+            attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
             currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 10);
             currStage.setColor(Color.BLUE);
             lander.refuel();
@@ -160,9 +179,10 @@ public class Main {
                     e.printStackTrace();
                 }
                 lander.tick(0.03);
-
                 frame.repaint();
                 fuelPercent.setText((int)lander.fuelPercent + "% " + fuelBars[(int)(lander.fuelPercent/10)]);
+                velocityLabel.setText(String.valueOf((int) Math.sqrt(lander.velocity.get(0)*lander.velocity.get(0) + lander.velocity.get(1)*lander.velocity.get(1))) + " METERS/SEC");
+                angleLabel.setText(String.valueOf((int)Math.toDegrees(lander.angle) - 90) + " DEG");
                 if (currStage != null) {
                     lander.collisionArea.intersect(currStage.collisionArea);
                     if (!lander.collisionArea.isEmpty() || lander.location.x < 0 || lander.location.x > frame.getWidth()) {
@@ -171,10 +191,13 @@ public class Main {
                         currStage.resetStage();
                         lander.refuel();
                         lander.resetMotion();
+                        attemptCount++;
+                        attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
                     }
                 }
             }
             frame.remove(currStage);
+            attemptCount = 0;
         }
 
     }

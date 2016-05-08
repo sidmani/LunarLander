@@ -27,9 +27,9 @@ public class Lander extends JComponent{
 
     protected Point location = new Point();
 
-    private double angle = Math.PI/2;
+    protected double angle = Math.PI/2;
 
-    private Vector<Double> velocity;
+    protected Vector<Double> velocity;
     private Vector<Double> acceleration;
 
     private double rotationalVelocity = 0;
@@ -87,22 +87,27 @@ public class Lander extends JComponent{
     public void tick(Double elapsed) {
         if (fuelPercent > 0) {
             if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
-                fuelPercent -= 9*elapsed;
+                fuelPercent -= 9 * elapsed;
             }
             if (rotationalAcc != 0) {
-                fuelPercent -= 3*elapsed;
+                fuelPercent -= 3 * elapsed;
             }
         }
-        rotationalVelocity += rotationalAcc * elapsed;
-        angle += rotationalVelocity*elapsed;
+        else {
+            acceleration.set(1, 0.0);
+            acceleration.set(0, 0.0);
+            rotationalAcc = 0;
+        }
+            rotationalVelocity += rotationalAcc * elapsed;
+            angle += rotationalVelocity * elapsed;
 
-        double angleSin = Math.sin(angle);
-        double angleCos = Math.cos(angle);
+            double angleSin = Math.sin(angle);
+            double angleCos = Math.cos(angle);
 
-        double newVelX = velocity.firstElement() + angleCos * acceleration.firstElement()*elapsed + baseAcceleration.firstElement()*elapsed;
-        double newVelY = velocity.lastElement() + angleSin * acceleration.lastElement()*elapsed + baseAcceleration.lastElement()*elapsed;
-        velocity.set(0, newVelX);
-        velocity.set(1, newVelY);
+            double newVelX = velocity.firstElement() + angleCos * acceleration.firstElement() * elapsed + baseAcceleration.firstElement() * elapsed;
+            double newVelY = velocity.lastElement() + angleSin * acceleration.lastElement() * elapsed + baseAcceleration.lastElement() * elapsed;
+            velocity.set(0, newVelX);
+            velocity.set(1, newVelY);
 
         double newX = location.getX() + velocity.firstElement()*elapsed;
         double newY = location.getY() + velocity.lastElement()*elapsed;
