@@ -218,7 +218,20 @@ public class Main {
 					}
 					lander.collisionArea.intersect(currStage.collisionArea);
 					if (!lander.collisionArea.isEmpty() || lander.location.x < 0 || lander.location.x > frame.getWidth()) {
-						System.out.println("collision");
+						Clip explosion;
+						try {
+							explosion = playSound("src/rocketExplosion.wav");
+
+							Thread.sleep(3000);
+						} catch (LineUnavailableException e) {
+							e.printStackTrace();
+						} catch (UnsupportedAudioFileException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 						reset();
 						attemptCount++;
 						attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
