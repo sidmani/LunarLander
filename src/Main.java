@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Sid on 5/7/16.
  */
 public class Main {
-    private static final double ANGLE_ACCURACY = Math.PI/4;
+    private static final double ANGLE_ACCURACY = Math.PI/12;
     private static final int MAX_SAFE_VELOCITY = 100;
 
     private static String[] fuelBars = {
@@ -95,75 +95,40 @@ public class Main {
 
             /** Handle the key-pressed event from the text field. */
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_A) {
+                if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
                     // A pressed
                     lander.applyThrustRight(true);
                 }
-                else if (e.getKeyCode() == KeyEvent.VK_D) {
+                else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     // A pressed
                     lander.applyThrustLeft(true);
                 }
-                else if (e.getKeyCode() == KeyEvent.VK_S) {
+                else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_UP) {
                     // A pressed
                     lander.applyThrustDown(true, -200);
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_R) {
+                    reset();
                 }
             }
 
             /** Handle the key-released event from the text field. */
             public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_A) {
+                if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
                     // A pressed
                     lander.applyThrustRight(false);
                 }
-                else if (e.getKeyCode() == KeyEvent.VK_D) {
+                else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     // A pressed
                     lander.applyThrustLeft(false);
                 }
-                else if (e.getKeyCode() == KeyEvent.VK_S) {
+                else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_UP) {
                     // A pressed
                     lander.applyThrustDown(false, -200);
                 }
             }
         }
         frame.addKeyListener(new wasdListener());
-
-        class arrowListener implements KeyListener { //if the user wants to use the arrow keys
-            public void keyTyped(KeyEvent e) {
-            }
-
-            /** Handle the key-pressed event from the text field. */
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    // A pressed
-                    lander.applyThrustRight(true);
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    // A pressed
-                    lander.applyThrustLeft(true);
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    // A pressed
-                    lander.applyThrustDown(true, -200);
-                }
-            }
-
-            /** Handle the key-released event from the text field. */
-            public void keyReleased(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                    // A pressed
-                    lander.applyThrustRight(false);
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                    // A pressed
-                    lander.applyThrustLeft(false);
-                }
-                else if (e.getKeyCode() == KeyEvent.VK_UP) {
-                    // A pressed
-                    lander.applyThrustDown(false, -200);
-                }
-            }
-        }
-        frame.addKeyListener(new arrowListener());
 	    frame.setVisible(true);
         //////////////start levels//////////////////////////////
         int attemptCount = 0;
@@ -173,8 +138,7 @@ public class Main {
             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
             currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 10);
             currStage.setColor(Color.BLUE);
-            lander.refuel();
-            lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
+            reset();
             frame.add(currStage);
             frame.setVisible(true);
             complete = false;
@@ -203,6 +167,11 @@ public class Main {
                     angleLabel.setForeground(Color.GREEN);
                 }
                 if (currStage != null) {
+                    JetPack j = currStage.struckJetPack(lander.collisionArea);
+                    if (j != null) {
+                        lander.addPowerup(j);
+                        System.out.println("Struck Jet Pack");
+                    }
                     if (lander.collisionArea.intersects(currStage.landingPad)) {
                         System.out.println("Landing Attempt");
                         if (Math.abs(lander.angle - Math.PI/2) < ANGLE_ACCURACY && velocity < MAX_SAFE_VELOCITY && lander.location.y < currStage.landingPad.y + 5) {
@@ -212,10 +181,7 @@ public class Main {
                             lander.resetMotion();
                         }
                         else {
-                            lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
-                            currStage.resetStage();
-                            lander.refuel();
-                            lander.resetMotion();
+                            reset();
                             attemptCount++;
                             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
                         }
@@ -223,10 +189,7 @@ public class Main {
                     lander.collisionArea.intersect(currStage.collisionArea);
                     if (!lander.collisionArea.isEmpty() || lander.location.x < 0 || lander.location.x > frame.getWidth()) {
                         System.out.println("collision");
-                        lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
-                        currStage.resetStage();
-                        lander.refuel();
-                        lander.resetMotion();
+                        reset();
                         attemptCount++;
                         attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
                     }
@@ -237,5 +200,13 @@ public class Main {
             attemptCount = 0;
         }
 
+    }
+    public static void reset() {
+        lander.refuel();
+        lander.resetMotion();
+        if (currStage != null) {
+            lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
+            currStage.addJetPacks();
+        }
     }
 }

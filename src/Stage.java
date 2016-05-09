@@ -14,9 +14,10 @@ import java.util.Random;
  * Created by Sid on 5/7/16.
  */
 public class Stage extends JComponent {
-    protected boolean completed = false;
     protected Point startLoc;
     protected Rectangle2D.Double landingPad;
+
+    private ArrayList<JetPack> powerups = new ArrayList<>();
 
 	private final int NUMBER_OF_LINES = 9;
     private ArrayList<Point2D.Double> points = new ArrayList<>();
@@ -24,6 +25,7 @@ public class Stage extends JComponent {
 	private ArrayList<Polygon> sky = new ArrayList<>();
     private Color color = null;
     protected Area collisionArea = new Area();
+
     public Stage(int width, int height, int difficulty)  {
 	    setBounds(getX(), getY(), width, height);
 
@@ -49,14 +51,23 @@ public class Stage extends JComponent {
             collisionArea.add(new Area(p));
         }
         startLoc = new Point(15,  (int)((this.points.get(0).getY() + 0.5*tunnelSize - centerY)+(this.points.get(0).getY() - 0.5 * tunnelSize - centerY))/2);
-        Point endLoc = new Point((int)this.points.get(points.size()-2).getX(),  (int)((this.points.get(points.size()-2).getY() + 0.5*tunnelSize - centerY)+(this.points.get(points.size()-2).getY() - 0.5 * tunnelSize - centerY))/2 + 30);
+        Point endLoc = new Point((int)this.points.get(points.size()-2).getX(),  (int)((this.points.get(points.size()-2).getY()  - centerY) + 30));
         landingPad = new Rectangle2D.Double(endLoc.x - 10, endLoc.y, 60, 5);
+    }
+    public void addJetPacks() {
+        powerups.add(new JetPack(getWidth()/2,  (int)(this.points.get(points.size()/2).getY() - getHeight()/2)));
+    }
+    public JetPack struckJetPack(Area rect) {
+        for (JetPack j : powerups) {
+            if (rect.intersects(new Rectangle2D.Double(j.xLoc, j.yLoc, j.jetPackImage.getWidth(), j.jetPackImage.getHeight()))) {
+                powerups.remove(j);
+                return j;
+            }
+        }
+        return null;
     }
     public void setColor(Color c) {
         color = c;
-    }
-    public void resetStage() {
-        completed = false;
     }
     @Override
     public void paintComponent(Graphics g) {
@@ -87,5 +98,8 @@ public class Stage extends JComponent {
         g2.draw(collisionArea);
         g2.setColor(Color.CYAN);
         g2.fill(landingPad);
+        for (JetPack j : powerups) {
+            g2.drawImage(j.jetPackImage, j.xLoc, j.yLoc, this);
+        }
     }
 }

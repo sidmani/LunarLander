@@ -83,14 +83,16 @@ public class Lander extends JComponent{
         location = new Point(x,y);
         collisionRect = new Rectangle2D.Double(getX(), getY(), mainImage.getWidth(), mainImage.getHeight());
     }
-
+    public void addPowerup(JetPack j) {
+        fuelPercent = Math.min(100, fuelPercent + j.fuelRegenPercent);
+    }
     public void tick(Double elapsed) {
         if (fuelPercent > 0) {
             if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
-                fuelPercent -= 1 * elapsed;
+                fuelPercent -= 10 * elapsed;
             }
             if (rotationalAcc != 0) {
-                fuelPercent -= 0.3 * elapsed;
+                fuelPercent -= 5 * elapsed;
             }
         }
         else {
