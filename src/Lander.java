@@ -89,15 +89,19 @@ public class Lander extends JComponent {
 	public void tick(Double elapsed) {
 		if (fuelPercent > 0) {
 			if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
-				fuelPercent -= 10 * elapsed;
+				fuelPercent -= 5 * elapsed;
 			}
 			if (rotationalAcc != 0) {
-				fuelPercent -= 5 * elapsed;
+				fuelPercent -= 2 * elapsed;
 			}
 		} else {
 			acceleration.set(1, 0.0);
 			acceleration.set(0, 0.0);
 			rotationalAcc = 0;
+            mainImage = base_image;
+            Main.c.stop();
+
+
 		}
 		rotationalVelocity += rotationalAcc * elapsed;
 		angle += rotationalVelocity * elapsed;
@@ -105,8 +109,8 @@ public class Lander extends JComponent {
 		double angleSin = Math.sin(angle);
 		double angleCos = Math.cos(angle);
 
-		double newVelX = velocity.firstElement() + angleCos * acceleration.firstElement() * elapsed + baseAcceleration.firstElement() * elapsed;
-		double newVelY = velocity.lastElement() + angleSin * acceleration.lastElement() * elapsed + baseAcceleration.lastElement() * elapsed;
+		double newVelX = velocity.firstElement() + angleCos * acceleration.firstElement() * elapsed + baseAcceleration.firstElement() * elapsed + angleSin * rotationalAcc * elapsed * 50;
+		double newVelY = velocity.lastElement() + angleSin * acceleration.lastElement() * elapsed + baseAcceleration.lastElement() * elapsed + angleCos * rotationalAcc * elapsed * 50;
 		velocity.set(0, newVelX);
 		velocity.set(1, newVelY);
 
@@ -140,10 +144,11 @@ public class Lander extends JComponent {
 		}
 	}
 
-	public void applyThrustLeft(boolean enable) {
+	public void applyThrustLeft(boolean enable, double magnitude) {
 		if (enable && fuelPercent > 0) {
 			rotationalAcc = 1;
-			//TODO: display flames
+
+            //TODO: display flames
 			if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
 				mainImage = flame_bottom_left;
 			} else {
@@ -159,10 +164,11 @@ public class Lander extends JComponent {
 		}
 	}
 
-	public void applyThrustRight(boolean enable) {
-		if (enable && fuelPercent > 0) {
+	public void applyThrustRight(boolean enable, double magnitude) {
+        if (enable && fuelPercent > 0) {
 			rotationalAcc = -1;
-			//TODO: display flames
+
+            //TODO: display flames
 			if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
 				mainImage = flame_bottom_right;
 			} else {

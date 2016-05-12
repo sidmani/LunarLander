@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 public class Main {
 	private static final double ANGLE_ACCURACY = Math.PI / 12;
 	private static final int MAX_SAFE_VELOCITY = 100;
+    static Clip c = null;
 
 	private static String[] fuelBars = {
 			"|", "||", "|||", "||||", "|||||", "||||||", "|||||||", "||||||||", "|||||||||", "||||||||||", "|||||||||||"
@@ -89,7 +90,6 @@ public class Main {
 		Lander.setGravity(0, 100);  //xComponent Gravity is always 0, yComponent should be changeable
 
 		class wasdListener implements KeyListener { //if the user wants to use W,A,S,D keys
-			Clip c = null;
 
 			public void keyTyped(KeyEvent e) {
 
@@ -100,8 +100,8 @@ public class Main {
 
 				if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 					// A pressed
-					lander.applyThrustRight(true);
-					if (c == null || !c.isRunning()) {
+					lander.applyThrustRight(true, 50);
+					if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
 						try {
 							c = playSound("src/rocketSound.wav");
 						} catch (LineUnavailableException e1) {
@@ -114,8 +114,8 @@ public class Main {
 					}
 				} else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					// A pressed
-					lander.applyThrustLeft(true);
-					if (c == null || !c.isRunning()) {
+					lander.applyThrustLeft(true, 50);
+					if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
 						try {
 							c = playSound("src/rocketSound.wav");
 						} catch (LineUnavailableException e1) {
@@ -129,7 +129,7 @@ public class Main {
 				} else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_UP) {
 					// A pressed
 					lander.applyThrustDown(true, -200);
-					if (c == null || !c.isRunning()) {
+					if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
 						try {
 							c = playSound("src/rocketSound.wav");
 						} catch (LineUnavailableException e1) {
@@ -147,13 +147,15 @@ public class Main {
 
 			/** Handle the key-released event from the text field. */
 			public void keyReleased(KeyEvent e) {
-				c.stop();
+                if (c != null) {
+                    c.stop();
+                }
 				if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
 					// A pressed
-					lander.applyThrustRight(false);
+					lander.applyThrustRight(false, 0);
 				} else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
 					// A pressed
-					lander.applyThrustLeft(false);
+					lander.applyThrustLeft(false, 0);
 				} else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_UP) {
 					// A pressed
 					lander.applyThrustDown(false, -200);
@@ -168,8 +170,7 @@ public class Main {
 		int velocity = 0;
 		for (int i = 0; i < 10; i++) {
 			attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
-			currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 10);
-//			currStage = new Stage(frame.getWidth(), frame.getHeight(), 33);
+			currStage = new Stage(frame.getWidth(), frame.getHeight(), 40);
 			currStage.setColor(Color.BLUE);
 			reset();
 			frame.add(currStage);

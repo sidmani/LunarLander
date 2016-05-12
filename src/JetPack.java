@@ -11,7 +11,6 @@ public class JetPack {
 	protected BufferedImage jetPackImage;
 	protected double fuelRegenPercent = 40;
 	protected int xLoc, yLoc;
-	private boolean goingUp = true;
 
 	public JetPack(int x, int y) {
 		try {
