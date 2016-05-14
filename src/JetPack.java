@@ -8,18 +8,18 @@ import java.io.IOException;
  */
 public class JetPack {
 
-	protected BufferedImage jetPackImage;
-	protected double fuelRegenPercent = 40;
-	protected int xLoc, yLoc;
+    protected BufferedImage jetPackImage;
+    protected double fuelRegenPercent = 40;
+    protected int xLoc, yLoc;
 
-	public JetPack(int x, int y) {
-		try {
-			jetPackImage = ImageIO.read(new File("src/jetPack.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		xLoc = x;
-		yLoc = y;
-	}
+    public JetPack(int x, int y) {
+        try {
+            jetPackImage = ImageIO.read(new File("src/jetPack.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        xLoc = x;
+        yLoc = y;
+    }
 
 }

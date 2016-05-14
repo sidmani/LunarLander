@@ -8,55 +8,55 @@ import java.awt.image.BufferedImage;
 
 public class FadeIn extends JComponent implements ActionListener {
 
-	private BufferedImage imagem;
-	private Timer timer;
-	private float alpha = 0f;
-	private Point loc;
-	private boolean increase = true;
+    private BufferedImage imagem;
+    private Timer timer;
+    private float alpha = 0f;
+    private Point loc;
+    private boolean increase = true;
 
-	public FadeIn(BufferedImage b, int x, int y, int frameWidth, int frameHeight) {
-		setBounds(getX(), getY(), frameWidth, frameHeight);
-		imagem = b;
-		loc = new Point(x, y);
-	}
+    public FadeIn(BufferedImage b, int x, int y, int frameWidth, int frameHeight) {
+        setBounds(getX(), getY(), frameWidth, frameHeight);
+        imagem = b;
+        loc = new Point(x, y);
+    }
 
-	public void startIncrease() {
-		timer = new Timer(100, this);
-		increase = true;
-		timer.start();
-	}
+    public void startIncrease() {
+        timer = new Timer(100, this);
+        increase = true;
+        timer.start();
+    }
 
-	public void startDecrease() {
-		timer = new Timer(100, this);
-		increase = false;
-		timer.start();
-	}
+    public void startDecrease() {
+        timer = new Timer(100, this);
+        increase = false;
+        timer.start();
+    }
 
-	// here you define alpha 0f to 1f
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
+    // here you define alpha 0f to 1f
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-				alpha));
-		g2d.drawImage(imagem, loc.x - imagem.getWidth() / 2, loc.y - imagem.getHeight() / 2, null);
-	}
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                alpha));
+        g2d.drawImage(imagem, loc.x - imagem.getWidth() / 2, loc.y - imagem.getHeight() / 2, null);
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		if (increase) {
-			alpha += 0.05f;
-			if (alpha > 0.95) {
-				alpha = 1;
-				timer.stop();
-			}
-		} else {
-			alpha -= 0.05f;
-			if (alpha < 0.05) {
-				alpha = 0;
-				timer.stop();
-			}
-		}
-		revalidate();
-		repaint();
-	}
+    public void actionPerformed(ActionEvent e) {
+        if (increase) {
+            alpha += 0.05f;
+            if (alpha > 0.95) {
+                alpha = 1;
+                timer.stop();
+            }
+        } else {
+            alpha -= 0.05f;
+            if (alpha < 0.05) {
+                alpha = 0;
+                timer.stop();
+            }
+        }
+        revalidate();
+        repaint();
+    }
 }
