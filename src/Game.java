@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -176,7 +175,7 @@ public class Game {
         int velocity = 0;
         for (int i = 0; i < 10; i++) {
             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
-            currStage = new Stage(frame.getWidth(), frame.getHeight(), 40);
+            currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 13);
             currStage.setColor(Color.BLUE);
             reset();
             frame.add(currStage);
@@ -227,19 +226,24 @@ public class Game {
                     if (!lander.collisionArea.isEmpty() || lander.location.x < 0 || lander.location.x > frame.getWidth()) {
                         Clip explosion;
                         try {
+	                        lander.setVisible(false);
+	                        currStage.setVisible(false);
+
                             explosion = playSound("src/rocketExplosion.wav");
 
-                            Thread.sleep(3000);
+	                        CutScene cs = new CutScene(frame, new File("src/cryWhenDie.gif"), Utility.getSound("src/Fatality.wav"), ImageIO.read(new File("src/wasted.png")));
+	                        cs.start();
+
+	                        lander.setVisible(true);
+	                        currStage.setVisible(true);
                         } catch (LineUnavailableException e) {
                             e.printStackTrace();
                         } catch (UnsupportedAudioFileException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
                         }
-                        reset();
+	                    reset();
                         attemptCount++;
                         attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
                     }
