@@ -49,7 +49,7 @@ public class Main {
 
         JFXPanel jfx = new JFXPanel();
         Music.fetchTracks();
-        Music.playIntro();
+		Music.playIntro();
 
         frame = new JFrame();
         frame.setUndecorated(true);

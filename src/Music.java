@@ -12,7 +12,6 @@ public class Music {
 
     static Media com64;
 
-    static MediaPlayer soundPlayer;
     static MediaPlayer musicPlayer;
 
     public static void fetchTracks() {
