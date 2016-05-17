@@ -1,13 +1,13 @@
-import com.sun.org.apache.bcel.internal.generic.LAND;
-
-import javax.sound.sampled.*;
+import javax.imageio.ImageIO;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * Created by Anish Katukam on 5/16/2016.
@@ -118,7 +118,8 @@ public class Game {
                     lander.applyThrustRight(true, 50);
                     if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
                         try {
-                            c = playSound("src/rocketSound.wav");
+                            c = Utility.getSound("src/rocketSound.wav");
+	                        c.start();
                         } catch (LineUnavailableException e1) {
                             e1.printStackTrace();
                         } catch (UnsupportedAudioFileException e1) {
@@ -132,7 +133,8 @@ public class Game {
                     lander.applyThrustLeft(true, 50);
                     if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
                         try {
-                            c = playSound("src/rocketSound.wav");
+                            c = Utility.getSound("src/rocketSound.wav");
+	                        c.start();
                         } catch (LineUnavailableException e1) {
                             e1.printStackTrace();
                         } catch (UnsupportedAudioFileException e1) {
@@ -146,7 +148,8 @@ public class Game {
                     lander.applyThrustDown(true, -200);
                     if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
                         try {
-                            c = playSound("src/rocketSound.wav");
+                            c = Utility.getSound("src/rocketSound.wav");
+	                        c.start();
                         } catch (LineUnavailableException e1) {
                             e1.printStackTrace();
                         } catch (UnsupportedAudioFileException e1) {
@@ -191,7 +194,7 @@ public class Game {
         int velocity = 0;
         for (int i = 0; i < 10; i++) {
             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
-            currStage = new Stage(frame.getWidth(), frame.getHeight(), 40);
+            currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 13);
             currStage.setColor(Color.BLUE);
             reset();
             frame.add(currStage);
@@ -232,29 +235,77 @@ public class Game {
                             complete = true;
                             lander.refuel();
                             lander.resetMotion();
+
+	                        lander.setVisible(false);
+	                        currStage.setVisible(false);
+
+	                        Clip victory = null;
+	                        try {
+		                        victory = Utility.getSound("src/Victory.wav");
+		                        victory.start();
+
+		                        CutScene cs = new CutScene(frame, new File("src/happyWhenWin.gif"), Utility.getSound("src/Excellent Flawless Victory.wav"), ImageIO.read(new File("src/landed.png")));
+		                        cs.start();
+	                        } catch (LineUnavailableException e) {
+		                        e.printStackTrace();
+	                        } catch (UnsupportedAudioFileException e) {
+		                        e.printStackTrace();
+	                        } catch (IOException e) {
+		                        e.printStackTrace();
+	                        }
+
+	                        lander.setVisible(true);
+	                        currStage.setVisible(true);
                         } else {
                             reset();
                             attemptCount++;
                             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
+
+	                        lander.setVisible(false);
+	                        currStage.setVisible(false);
+
+	                        Clip explosion = null;
+	                        try {
+		                        explosion = Utility.getSound("src/rocketExplosion.wav");
+		                        explosion.start();
+
+		                        CutScene cs = new CutScene(frame, new File("src/cryWhenDie.gif"), Utility.getSound("src/Fatality.wav"), ImageIO.read(new File("src/wasted.png")));
+		                        cs.start();
+	                        } catch (LineUnavailableException e) {
+		                        e.printStackTrace();
+	                        } catch (UnsupportedAudioFileException e) {
+		                        e.printStackTrace();
+	                        } catch (IOException e) {
+		                        e.printStackTrace();
+	                        }
+
+	                        lander.setVisible(true);
+	                        currStage.setVisible(true);
                         }
                     }
                     lander.collisionArea.intersect(currStage.collisionArea);
                     if (!lander.collisionArea.isEmpty() || lander.location.x < 0 || lander.location.x > frame.getWidth()) {
                         Clip explosion;
                         try {
-                            explosion = playSound("src/rocketExplosion.wav");
+	                        lander.setVisible(false);
+	                        currStage.setVisible(false);
 
-                            Thread.sleep(3000);
+                            explosion = Utility.getSound("src/rocketExplosion.wav");
+	                        explosion.start();
+
+	                        CutScene cs = new CutScene(frame, new File("src/cryWhenDie.gif"), Utility.getSound("src/Fatality.wav"), ImageIO.read(new File("src/wasted.png")));
+	                        cs.start();
+
+	                        lander.setVisible(true);
+	                        currStage.setVisible(true);
                         } catch (LineUnavailableException e) {
                             e.printStackTrace();
                         } catch (UnsupportedAudioFileException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
                         }
-                        reset();
+	                    reset();
                         attemptCount++;
                         attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
                     }
@@ -274,21 +325,6 @@ public class Game {
             lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
             currStage.addJetPacks();
         }
-    }
-
-    public static Clip playSound(String fileName) throws MalformedURLException, LineUnavailableException, UnsupportedAudioFileException, IOException {
-        Clip clip = AudioSystem.getClip();
-        if (!isClosed) {
-            File url = new File(fileName);
-
-
-            AudioInputStream ais = AudioSystem.
-                    getAudioInputStream(url);
-            clip.open(ais);
-            clip.start();
-        }
-        return clip;
-
     }
 
     public static void setGravity(int x, int y) {
