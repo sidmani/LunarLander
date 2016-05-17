@@ -173,7 +173,8 @@ public class Game {
         int attemptCount = 0;
         boolean complete;
         int velocity = 0;
-        for (int i = 0; i < 10; i++) {
+
+	    for (int i = 0; i < 10; i++) {
             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
             currStage = new Stage(frame.getWidth(), frame.getHeight(), i * 3 + 13);
             currStage.setColor(Color.BLUE);
@@ -181,6 +182,13 @@ public class Game {
             frame.add(currStage);
             frame.setVisible(true);
             complete = false;
+
+		    try {
+			    Thread.sleep(100);
+		    } catch (InterruptedException e) {
+			    e.printStackTrace();
+		    }
+
             while (!complete) {
                 try {
                     Thread.sleep(30);
@@ -216,10 +224,53 @@ public class Game {
                             complete = true;
                             lander.refuel();
                             lander.resetMotion();
+
+	                        Clip victory;
+	                        try {
+		                        lander.setVisible(false);
+		                        currStage.setVisible(false);
+
+		                        victory = Utility.getSound("src/Victory.wav");
+		                        victory.start();
+
+		                        CutScene cs = new CutScene(frame, new File("src/happyWhenWin.gif"), Utility.getSound("src/Excellent Flawless Victory.wav"), ImageIO.read(new File("src/landed.png")));
+		                        cs.start();
+
+		                        lander.setVisible(true);
+		                        currStage.setVisible(true);
+	                        } catch (LineUnavailableException e) {
+		                        e.printStackTrace();
+	                        } catch (UnsupportedAudioFileException e) {
+		                        e.printStackTrace();
+	                        } catch (IOException e) {
+		                        e.printStackTrace();
+	                        }
+
+
                         } else {
                             reset();
                             attemptCount++;
                             attempts.setText(attemptCount + (attemptCount == 1 ? " ATTEMPT" : " ATTEMPTS"));
+
+	                        Clip explosion;
+	                        try {
+		                        lander.setVisible(false);
+		                        currStage.setVisible(false);
+
+		                        explosion = playSound("src/rocketExplosion.wav");
+
+		                        CutScene cs = new CutScene(frame, new File("src/cryWhenDie.gif"), Utility.getSound("src/Fatality.wav"), ImageIO.read(new File("src/wasted.png")));
+		                        cs.start();
+
+		                        lander.setVisible(true);
+		                        currStage.setVisible(true);
+	                        } catch (LineUnavailableException e) {
+		                        e.printStackTrace();
+	                        } catch (UnsupportedAudioFileException e) {
+		                        e.printStackTrace();
+	                        } catch (IOException e) {
+		                        e.printStackTrace();
+	                        }
                         }
                     }
                     lander.collisionArea.intersect(currStage.collisionArea);
