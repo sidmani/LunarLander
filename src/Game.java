@@ -292,7 +292,7 @@ public class Game {
     }
 
     public static void setGravity(int x, int y) {
-        Lander.setGravity(x, y);
+        //Lander.setGravity(x, y);
     }
 
     public static void closeGame() {
