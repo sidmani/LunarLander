@@ -17,6 +17,7 @@ public class Main {
     static BufferedImage background;
     static ImageIcon play;
     static ImageIcon highScores; //high scores
+    static JFrame frame;
 
     static ImageIcon scrollLeft;
     static ImageIcon scrollUp;
@@ -29,7 +30,7 @@ public class Main {
         Music.fetchTracks();
         Music.playIntro();
 
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setUndecorated(true);
         frame.setSize(3840, 2160);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -39,6 +40,12 @@ public class Main {
 
         ImageDrawer background = new ImageDrawer();
         background.setBounds(0, 0, 3840, 2160);
+
+        JLayeredPane playPanel = new JLayeredPane();
+        playPanel.setBounds(1920, 0, 1920, 1080);
+
+        JLayeredPane highScoresPanel = new JLayeredPane();
+        highScoresPanel.setBounds(0, 1080, 1920, 1080);
 
         try {
             play = new ImageIcon(ImageIO.read(new File("src/play.png")));
@@ -79,7 +86,6 @@ public class Main {
 
         goLeft.setBorderPainted(false);
         goUp.setBorderPainted(false);
-
 
         openPlayArea.addActionListener(new ActionListener() {
             @Override
@@ -137,7 +143,6 @@ public class Main {
 
         frame.add(menuPanel);
 
-//        frame.add(Game.getGameFrame()); //this is the part that will be executed by the "Play" button in the menu
         frame.setVisible(true);
 
     }

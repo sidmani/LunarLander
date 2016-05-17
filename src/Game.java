@@ -33,31 +33,31 @@ public class Game {
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.getContentPane().setBackground(Color.BLACK);
         lander = new Lander(frame.getWidth(), frame.getHeight());
-        FadeIn f = null;
-        try {
-            BufferedImage b;
-            b = ImageIO.read(new File("src/logo.png"));
-            f = new FadeIn(b, frame.getWidth() / 2, frame.getHeight() / 2, frame.getWidth(), frame.getHeight());
-            frame.add(f);
-            f.startIncrease();
-        } catch (IOException e) {
-            System.out.println("failure to load logo");
-        }
-        frame.setVisible(true);
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-        if (f != null) {
-            f.startDecrease();
-        }
-        try {
-            Thread.sleep(3000);                 //1000 milliseconds is one second.
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-        frame.getContentPane().removeAll();
+//        FadeIn f = null;
+//        try {
+//            BufferedImage b;
+//            b = ImageIO.read(new File("src/logo.png"));
+//            f = new FadeIn(b, frame.getWidth() / 2, frame.getHeight() / 2, frame.getWidth(), frame.getHeight());
+//            frame.add(f);
+//            f.startIncrease();
+//        } catch (IOException e) {
+//            System.out.println("failure to load logo");
+//        }
+//        frame.setVisible(true);
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException ex) {
+//            Thread.currentThread().interrupt();
+//        }
+//        if (f != null) {
+//            f.startDecrease();
+//        }
+//        try {
+//            Thread.sleep(3000);                 //1000 milliseconds is one second.
+//        } catch (InterruptedException ex) {
+//            Thread.currentThread().interrupt();
+//        }
+//        frame.getContentPane().removeAll();
 
         frame.add(lander);
         frame.setVisible(true);
