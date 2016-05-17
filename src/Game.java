@@ -1,10 +1,8 @@
-import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -18,6 +16,10 @@ public class Game {
     private static final int MAX_SAFE_VELOCITY = 100;
     static Clip c = null;
 
+    static boolean isClosed;
+
+    static JFrame frame;
+
     private static String[] fuelBars = {
             "|", "||", "|||", "||||", "|||||", "||||||", "|||||||", "||||||||", "|||||||||", "||||||||||", "|||||||||||"
     };
@@ -25,9 +27,9 @@ public class Game {
     private static Stage currStage;
 
     public static JFrame getGameFrame() {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setUndecorated(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         frame.setLayout(null);
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
@@ -102,6 +104,13 @@ public class Game {
              */
             public void keyPressed(KeyEvent e) {
 
+                if (e.getKeyCode() == KeyEvent.VK_Q) {
+
+                    closeGame();
+
+
+
+                }
                 if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
                     // A pressed
                     lander.applyThrustRight(true, 50);
@@ -156,13 +165,17 @@ public class Game {
                 if (c != null) {
                     c.stop();
                 }
-                if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
+                if (e.getKeyCode() == KeyEvent.VK_A ||
+                        e.getKeyCode() == KeyEvent.VK_LEFT) {
                     // A pressed
                     lander.applyThrustRight(false, 0);
-                } else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                } else if (e.getKeyCode() == KeyEvent.VK_D ||
+                        e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     // A pressed
                     lander.applyThrustLeft(false, 0);
-                } else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_UP) {
+                } else if (e.getKeyCode() == KeyEvent.VK_S ||
+                        e.getKeyCode() == KeyEvent.VK_UP ||
+                        e.getKeyCode() == KeyEvent.VK_W) {
                     // A pressed
                     lander.applyThrustDown(false, -200);
                 }
@@ -262,14 +275,28 @@ public class Game {
     }
 
     public static Clip playSound(String fileName) throws MalformedURLException, LineUnavailableException, UnsupportedAudioFileException, IOException {
-        File url = new File(fileName);
         Clip clip = AudioSystem.getClip();
+        if (!isClosed) {
+            File url = new File(fileName);
 
-        AudioInputStream ais = AudioSystem.
-                getAudioInputStream(url);
-        clip.open(ais);
-        clip.start();
+
+            AudioInputStream ais = AudioSystem.
+                    getAudioInputStream(url);
+            clip.open(ais);
+            clip.start();
+        }
         return clip;
+
+    }
+
+    public static void setGravity(int x, int y) {
+        Lander.setGravity(x, y);
+    }
+
+    public static void closeGame() {
+        isClosed = true;
+        frame.dispose();
+        Main.menuPanel.remove(Main.contentPanel);
     }
 }
 
