@@ -1,12 +1,13 @@
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 /**
  * Created by Anish Katukam on 5/16/2016.
@@ -32,31 +33,6 @@ public class Game {
         frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
         frame.getContentPane().setBackground(Color.BLACK);
         lander = new Lander(frame.getWidth(), frame.getHeight());
-//        FadeIn f = null;
-//        try {
-//            BufferedImage b;
-//            b = ImageIO.read(new File("src/logo.png"));
-//            f = new FadeIn(b, frame.getWidth() / 2, frame.getHeight() / 2, frame.getWidth(), frame.getHeight());
-//            frame.add(f);
-//            f.startIncrease();
-//        } catch (IOException e) {
-//            System.out.println("failure to load logo");
-//        }
-//        frame.setVisible(true);
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException ex) {
-//            Thread.currentThread().interrupt();
-//        }
-//        if (f != null) {
-//            f.startDecrease();
-//        }
-//        try {
-//            Thread.sleep(3000);                 //1000 milliseconds is one second.
-//        } catch (InterruptedException ex) {
-//            Thread.currentThread().interrupt();
-//        }
-//        frame.getContentPane().removeAll();
 
         frame.add(lander);
         frame.setVisible(true);
@@ -106,7 +82,8 @@ public class Game {
                     lander.applyThrustRight(true, 50);
                     if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
                         try {
-                            c = playSound("src/rocketSound.wav");
+                            c = Utility.getSound("src/rocketSound.wav");
+	                        c.start();
                         } catch (LineUnavailableException e1) {
                             e1.printStackTrace();
                         } catch (UnsupportedAudioFileException e1) {
@@ -120,7 +97,8 @@ public class Game {
                     lander.applyThrustLeft(true, 50);
                     if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
                         try {
-                            c = playSound("src/rocketSound.wav");
+                            c = Utility.getSound("src/rocketSound.wav");
+	                        c.start();
                         } catch (LineUnavailableException e1) {
                             e1.printStackTrace();
                         } catch (UnsupportedAudioFileException e1) {
@@ -134,7 +112,8 @@ public class Game {
                     lander.applyThrustDown(true, -200);
                     if ((c == null || !c.isRunning()) && lander.fuelPercent > 0) {
                         try {
-                            c = playSound("src/rocketSound.wav");
+                            c = Utility.getSound("src/rocketSound.wav");
+	                        c.start();
                         } catch (LineUnavailableException e1) {
                             e1.printStackTrace();
                         } catch (UnsupportedAudioFileException e1) {
@@ -182,12 +161,6 @@ public class Game {
             frame.add(currStage);
             frame.setVisible(true);
             complete = false;
-
-		    try {
-			    Thread.sleep(100);
-		    } catch (InterruptedException e) {
-			    e.printStackTrace();
-		    }
 
             while (!complete) {
                 try {
@@ -257,7 +230,8 @@ public class Game {
 		                        lander.setVisible(false);
 		                        currStage.setVisible(false);
 
-		                        explosion = playSound("src/rocketExplosion.wav");
+		                        explosion = Utility.getSound("src/rocketExplosion.wav");
+		                        explosion.start();
 
 		                        CutScene cs = new CutScene(frame, new File("src/cryWhenDie.gif"), Utility.getSound("src/Fatality.wav"), ImageIO.read(new File("src/wasted.png")));
 		                        cs.start();
@@ -280,7 +254,8 @@ public class Game {
 	                        lander.setVisible(false);
 	                        currStage.setVisible(false);
 
-                            explosion = playSound("src/rocketExplosion.wav");
+                            explosion = Utility.getSound("src/rocketExplosion.wav");
+	                        explosion.start();
 
 	                        CutScene cs = new CutScene(frame, new File("src/cryWhenDie.gif"), Utility.getSound("src/Fatality.wav"), ImageIO.read(new File("src/wasted.png")));
 	                        cs.start();
@@ -314,17 +289,6 @@ public class Game {
             lander.setLoc(currStage.startLoc.x, currStage.startLoc.y);
             currStage.addJetPacks();
         }
-    }
-
-    public static Clip playSound(String fileName) throws MalformedURLException, LineUnavailableException, UnsupportedAudioFileException, IOException {
-        File url = new File(fileName);
-        Clip clip = AudioSystem.getClip();
-
-        AudioInputStream ais = AudioSystem.
-                getAudioInputStream(url);
-        clip.open(ais);
-        clip.start();
-        return clip;
     }
 }
 
