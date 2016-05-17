@@ -3,10 +3,8 @@ import javafx.embed.swing.JFXPanel;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +28,11 @@ public class Main {
     static ImageIcon exit;
     static ImageIcon start;
     static ImageIcon back;
+
+    static ImageIcon xGrav;
+    static ImageIcon yGrav;
+    static ImageIcon doIt;
+    static ImageIcon eventually;
 
     static JFrame contentFrame;
 
@@ -67,9 +70,18 @@ public class Main {
             exit = new ImageIcon(ImageIO.read(new File("src/exit.png")));
             start = new ImageIcon(ImageIO.read(new File("src/start.png")));
             back = new ImageIcon(ImageIO.read(new File("src/back.png")));
+            xGrav = new ImageIcon(ImageIO.read(new File("src/xGrav.png")));
+            yGrav = new ImageIcon(ImageIO.read(new File("src/yGrav.png")));
+            doIt = new ImageIcon(ImageIO.read(new File("src/doIt.png")));
+            eventually = new ImageIcon(ImageIO.read(new File("src/eventually.png")));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        JLabel eventuallyLabel = new JLabel(eventually);
+        eventuallyLabel.setBounds(1920 / 2 - eventually.getIconWidth() / 2, 1080 + 1080 / 2 - eventually.getIconHeight() / 2, eventually.getIconWidth(), eventually.getIconHeight());
+
 
         JButton playButton = new JButton(start);
         playButton.setBounds(1920 + (1920 / 2) - start.getIconWidth() / 2, (1080 / 5) - start.getIconHeight(), start.getIconWidth(), start.getIconHeight());
@@ -91,6 +103,24 @@ public class Main {
 
         JButton quit = new JButton(exit);
         quit.setBounds(1770, 0, exit.getIconWidth(), exit.getIconHeight());
+
+        JLabel xLabel = new JLabel(xGrav);
+        xLabel.setBounds(1920 + (1 * 1920 / 5) - xGrav.getIconWidth() / 2, 1080 / 3, xGrav.getIconWidth(), xGrav.getIconHeight());
+        JLabel yLabel = new JLabel(yGrav);
+        yLabel.setBounds(1920 + (4 * 1920 / 5) - xGrav.getIconWidth() / 2, 1080 / 3, yGrav.getIconWidth(), yGrav.getIconHeight());
+
+        JButton updateGravity = new JButton(doIt);
+        updateGravity.setBounds(1920 + 1920 / 2 - (doIt.getIconWidth() / 2), 2 * 1080 / 3, doIt.getIconWidth(), doIt.getIconHeight());
+
+        updateGravity.setBorderPainted(false);
+        updateGravity.setContentAreaFilled(false);
+
+        JSlider xSlider = new JSlider(0, 50, 0);
+        xSlider.setBounds(1920 + (1 * 1920 / 5) - xGrav.getIconWidth() / 2, 1080 / 3 + 80, xGrav.getIconWidth(), xGrav.getIconHeight());
+
+        JSlider ySlider = new JSlider(0, 50, 0);
+        ySlider.setBounds(1920 + (4 * 1920 / 5) - xGrav.getIconWidth() / 2, 1080 / 3 + 80, yGrav.getIconWidth(), yGrav.getIconHeight());
+
 
         quit.setContentAreaFilled(false);
         quit.setBorderPainted(false);
@@ -155,6 +185,7 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 new Thread() {
                     public void run() {
+                        Game.setGravity(xSlider.getX()/50, ySlider.getY()/50);
                         contentPanel = new JPanel();
                         contentPanel.add(Game.getGameFrame());
                         menuPanel.add(contentPanel, new Integer(3));
@@ -176,6 +207,13 @@ public class Main {
         menuPanel.add(quit, new Integer(1));
 
         menuPanel.add(playButton, new Integer(1));
+
+        menuPanel.add(xLabel, new Integer(2));
+        menuPanel.add(yLabel, new Integer(2));
+        menuPanel.add(updateGravity, new Integer(2));
+        menuPanel.add(xSlider, new Integer(2));
+        menuPanel.add(ySlider, new Integer(2));
+        menuPanel.add(eventuallyLabel, new Integer(2));
 
         frame.add(menuPanel);
 

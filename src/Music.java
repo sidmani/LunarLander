@@ -22,5 +22,13 @@ public class Music {
     public static void playIntro() {
         musicPlayer = new MediaPlayer(com64);
         musicPlayer.play();
+        musicPlayer.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                // actions here e.g.:
+                musicPlayer = new MediaPlayer(com64);
+                musicPlayer.play();
+            }
+        });
     }
 }

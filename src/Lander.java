@@ -31,6 +31,7 @@ public class Lander extends JComponent {
     private Vector<Double> acceleration;
     private double rotationalVelocity = 0;
     private double rotationalAcc = 0;
+    protected int flips = 0;
 
     public Lander(int frameWidth, int frameHeight) {
         try {
@@ -86,7 +87,15 @@ public class Lander extends JComponent {
         fuelPercent = Math.min(100, fuelPercent + j.fuelRegenPercent);
     }
 
+    public static int getScore(int remainingFuelPercent, double angle, double speed, int flips) {
+        return (int) (remainingFuelPercent * 10 + 100 / Math.abs(Math.PI / 2 - angle) + 5 * (100 - speed) + 200 * flips);
+    }
+
     public void tick(Double elapsed) {
+        if (angle > 2 * Math.PI) {
+            angle -= 2 * Math.PI;
+            flips++;
+        }
         if (fuelPercent > 0) {
             if (acceleration.get(0) != 0 || acceleration.get(1) != 0) {
                 fuelPercent -= 5 * elapsed;
